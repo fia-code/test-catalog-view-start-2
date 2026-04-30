@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLINIQ – Test Catalogue</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<style>
+
+:root {
+  --navy:        #5d77a6;
+  --navy-dark:   #4a6390;
+  --navy-light:  #7a94bb;
+  --sidebar-bg:  #5d77a6;
+  --accent:      #8aadd4;
+  --accent2:     #a8c2e0;
+  --white:       #ffffff;
+  --off-white:   #f4f6fa;
+  --card-bg:     #ffffff;
+  --text-dark:   #2c3e58;
+  --text-mid:    #5d77a6;
+  --text-light:  #96aac6;
+  --green:       #4caf86;
+  --red:         #e05c5c;
+  --orange:      #e8a04a;
+  --sidebar-w:   210px;
+  --border:      #d8e2f0;
+  --shadow:      0 2px 12px rgba(93,119,166,0.10);
+  --radius:      12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  background: var(--navy);
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: var(--sidebar-w); }
+.brand-name { color: var(--white); font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+.header-search {
+  flex: 1;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px; padding: 7px 14px;
+  color: var(--white); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; outline: none; transition: background 0.2s;
+  max-width: 420px;
+}
+.header-search::placeholder { color: rgba(255,255,255,0.5); }
+.header-search:focus { background: rgba(255,255,255,0.2); }
+.header-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.header-btn {
+  background: rgba(255,255,255,0.13); border: none; border-radius: 8px;
+  color: var(--white); font-size: 18px; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.18s; position: relative;
+}
+.header-btn:hover { background: rgba(255,255,255,0.25); }
+.notif-badge {
+  position: absolute; top: 4px; right: 4px;
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700;
+  border-radius: 50%; width: 15px; height: 15px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.layout { display: flex; flex: 1; }
+
+.sidebar {
+  width: var(--sidebar-w); background: var(--sidebar-bg);
+  display: flex; flex-direction: column;
+  padding: 18px 0 16px;
+  position: sticky; top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto; flex-shrink: 0;
+}
+.user-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 12px;
+}
+.user-avatar {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: var(--accent2);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px; color: var(--white);
+  flex-shrink: 0;
+}
+.user-info .name { color: var(--white); font-size: 13px; font-weight: 600; }
+.user-info .role { color: rgba(255,255,255,0.55); font-size: 11px; }
+
+.nav-section-label {
+  color: rgba(255,255,255,0.4);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 6px 18px 4px; margin-top: 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 18px;
+  color: rgba(255,255,255,0.75);
+  font-size: 13.5px; font-weight: 500;
+  cursor: pointer; transition: background 0.16s, color 0.16s;
+  border: none; background: none; width: 100%; text-align: left; text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.nav-item.active {
+  background: rgba(255,255,255,0.18); color: var(--white);
+  border-left: 3px solid var(--accent2); padding-left: 15px;
+}
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-footer {
+  margin-top: auto; padding: 12px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.signout-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 18px; color: rgba(255,255,255,0.7);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; background: none; border: none; width: 100%;
+  transition: background 0.16s, color 0.16s;
+}
+.signout-btn:hover { background: rgba(255,0,0,0.12); color: #ff7f7f; }
+.brand-bottom {
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px 0 4px; opacity: 0.25; font-size: 48px;
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-bottom-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  opacity: 0.8;
+}
+
+.sidebar-bottom-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,35,65,0.45); z-index: 200;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--white); border-radius: 14px; padding: 28px 30px;
+  min-width: 340px; max-width: 460px; width: 100%;
+  box-shadow: 0 12px 40px rgba(20,35,65,0.22);
+  position: relative; animation: modalIn 0.2s ease;
+}
+@keyframes modalIn { from { transform: scale(0.93) translateY(12px); opacity: 0; } }
+.modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; font-size: 20px;
+  cursor: pointer; color: var(--text-light); transition: color 0.15s;
+}
+.modal-close:hover { color: var(--red); }
+.modal h2 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.modal p  { font-size: 13.5px; color: var(--text-mid); margin-bottom: 18px; line-height: 1.5; }
+.modal-input {
+  width: 100%; padding: 9px 13px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  margin-bottom: 12px; outline: none; color: var(--text-dark);
+  transition: border-color 0.18s;
+}
+.modal-input:focus { border-color: var(--accent); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+.btn {
+  padding: 9px 20px; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+  font-weight: 600; cursor: pointer; border: none;
+  transition: opacity 0.15s, transform 0.12s;
+}
+.btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary   { background: var(--navy); color: #fff; }
+.btn-secondary { background: var(--off-white); color: var(--text-mid); border: 1px solid var(--border); }
+.btn-danger    { background: var(--red); color: #fff; }
+
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+  background: var(--navy-dark); color: #fff;
+  padding: 12px 18px; border-radius: 10px;
+  font-size: 13.5px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: toastIn 0.25s ease, toastOut 0.3s ease 2.7s forwards;
+  max-width: 300px;
+}
+.toast.success { border-left: 4px solid var(--green); }
+.toast.error   { border-left: 4px solid var(--red); }
+.toast.info    { border-left: 4px solid var(--accent); }
+@keyframes toastIn  { from { transform: translateX(60px); opacity: 0; } }
+@keyframes toastOut { to   { transform: translateX(60px); opacity: 0; } }
+
+.main { flex: 1; padding: 28px 30px; overflow-y: auto; }
+
+.page-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.page-title    { font-size: 22px; font-weight: 700; color: var(--text-dark); }
+.page-subtitle { color: var(--text-light); font-size: 13px; margin-top: 3px; }
+
+.btn-export-csv {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  color: var(--text-dark);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  padding: 7px 18px; border-radius: 8px; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-export-csv:hover { background: var(--off-white); }
+.btn-print-batch {
+  background: var(--navy);
+  border: none; color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600;
+  padding: 7px 18px; border-radius: 8px; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-print-batch:hover { background: var(--navy-dark); }
+
+.filter-bar { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+.search-wrap { flex: 1; position: relative; }
+.search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-light); font-size: 15px; }
+.search-wrap input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px 8px 34px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  background: var(--white);
+  outline: none; color: var(--text-dark);
+  transition: border-color 0.18s;
+}
+.search-wrap input:focus { border-color: var(--navy); }
+.search-wrap input::placeholder { color: var(--text-light); }
+
+.filter-dropdown {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 7px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-mid); cursor: pointer;
+  transition: border-color 0.15s;
+}
+.filter-dropdown:hover { border-color: var(--navy); }
+.filter-dropdown i { font-size: 11px; color: var(--text-light); }
+
+.dropdown-wrap { position: relative; }
+.dropdown-menu-custom {
+  display: none;
+  position: absolute; top: calc(100% + 6px); left: 0;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 8px; z-index: 200;
+  min-width: 150px; overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.dropdown-menu-custom.open { display: block; }
+.dropdown-menu-custom button {
+  display: block; width: 100%;
+  padding: 8px 16px; text-align: left;
+  background: none; border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--text-mid); cursor: pointer;
+}
+.dropdown-menu-custom button:hover { background: var(--off-white); }
+.dropdown-menu-custom button.selected { font-weight: 700; color: var(--navy); }
+
+.table-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.table-card table { width: 100%; border-collapse: collapse; }
+.table-card thead th {
+  color: var(--text-light); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 14px 16px; border-bottom: 1.5px solid var(--border);
+  background: var(--white); text-align: center;
+}
+.table-card tbody td {
+  padding: 13px 16px; font-size: 13px; color: var(--text-mid);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle; text-align: center;
+}
+.table-card tbody tr:last-child td { border-bottom: none; }
+.table-card tbody tr:hover { background: var(--off-white); }
+
+.req-id-link { color: var(--navy); font-weight: 600; font-size: 13px; text-decoration: none; }
+.req-id-link:hover { text-decoration: underline; }
+
+td.td-patient { text-align: left; }
+.patient-main { font-weight: 600; font-size: 13px; color: var(--text-dark); }
+.patient-sub  { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+.priority-text { font-size: 13px; color: var(--text-mid); }
+
+.sts-stat    { background:#e05c5c; color:#fff; padding:4px 14px; border-radius:20px; font-size:11px; font-weight:700; display:inline-block; }
+.sts-urgent  { background:#e8c84a; color:#fff; padding:4px 14px; border-radius:20px; font-size:11px; font-weight:700; display:inline-block; }
+.sts-routine { background:#5d77a6; color:#fff; padding:4px 14px; border-radius:20px; font-size:11px; font-weight:700; display:inline-block; }
+
+.tat-pending    { background:#e05c5c; color:#fff; padding:4px 14px; border-radius:20px; font-size:11px; font-weight:600; display:inline-block; }
+.tat-processing { background:#5d77a6; color:#fff; padding:4px 14px; border-radius:20px; font-size:11px; font-weight:600; display:inline-block; }
+.tat-completed  { background:#4caf86; color:#fff; padding:4px 14px; border-radius:20px; font-size:11px; font-weight:600; display:inline-block; }
+
+.actions-wrap { display: flex; gap: 5px; justify-content: center; align-items: center; }
+.act-start    { background: var(--navy); color:#fff; border:none; border-radius:6px; padding:5px 14px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition: background 0.15s; }
+.act-start:hover { background: var(--navy-dark); }
+.act-view     { background: var(--border); color: var(--text-dark); border:none; border-radius:6px; padding:5px 14px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition: background 0.15s; }
+.act-view:hover { background: #c5d3e8; }
+.act-complete { background: var(--green); color:#fff; border:none; border-radius:6px; padding:5px 14px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition: background 0.15s; }
+.act-complete:hover { background: #3a9270; }
+.act-pdf      { background: var(--white); color: var(--text-dark); border:1.5px solid var(--border); border-radius:6px; padding:5px 14px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition: border-color 0.15s; }
+.act-pdf:hover { border-color: var(--navy); color: var(--navy); }
+.act-pdf i { font-size: 12px; }
+
+.pagination-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-top: 1.5px solid var(--border);
+  font-size: 12px; color: var(--text-light);
+}
+.pg-btns { display: flex; gap: 4px; }
+.pg-btn {
+  width: 30px; height: 30px; border-radius: 7px;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text-mid);
+  font-size: 12px; font-family: 'DM Sans', sans-serif; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.pg-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.pg-btn:hover:not(.active) { background: var(--off-white); }
+
+@media(max-width:900px){
+  .sidebar { width: 54px; }
+  .nav-item span:last-child, .nav-section-label, .user-info, .signout-btn span:last-child { display: none; }
+  .user-card { justify-content: center; padding: 10px; }
+  .brand { min-width: 54px; }
+  .brand-name { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="brand">
+    <img src="cliniq_logo.png" alt="CLINIQ" width="28" height="28"/>
+    <span class="brand-name">CLINIQ</span>
+  </div>
+  <input class="header-search" type="search" placeholder="Search tests, patients, requests…"/>
+  <div class="header-actions">
+    <button class="header-btn" onclick="showToast('No new messages.','info')" title="Messages">✉️</button>
+    <button class="header-btn" onclick="openModal('notif-modal')" title="Notifications">
+      🔔<span class="notif-badge" id="notifBadge">3</span>
+    </button>
+    <button class="header-btn" onclick="openModal('profile-modal')" title="Profile">👤</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">MC</div>
+      <div class="user-info">
+        <div class="name">Curitana, MC</div>
+        <div class="role">Lab Administrator</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">OVERVIEW</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="dashboard_icon.png" alt="Dashboard" width="28" height="28"/>
+      <span class="nav-label">Dashboard</span>
+    </button>
+
+    <div class="nav-section-label">MANAGEMENT</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="search.png" alt="Search" width="28" height="28"/>
+      <span class="nav-label">Search</span>
+    </button>
+    <button class="nav-item active" onclick="setActive(this)">
+      <img src="lab_request_icon.png" alt="Lab Requests" width="28" height="28"/>
+      <span class="nav-label">Lab Requests</span>
+    </button>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="billing_icon.png" alt="Billing" width="28" height="28"/>
+      <span class="nav-label">Billing</span>
+    </button>
+
+    <div class="nav-section-label">REPORTS</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="analytics_icon.png" alt="Analytics" width="28" height="28"/>
+      <span class="nav-label">Analytics</span>
+    </button>
+
+    <div class="sidebar-footer">
+  <button class="signout-btn" onclick="openModal('signout-modal')">
+    <img src="signout_btn.png" alt="Sign Out" width="28" height="28"/>
+    <span class="nav-label">Sign Out</span>
+  </button>
+
+  <div class="sidebar-bottom-image">
+    <img src="cliniq_logo.png" alt="CLINIQ Building" width="80" height="80"/>
+  </div>
+</div>
+
+    
+  </aside>
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Test Catalogue</div>
+        <div class="page-subtitle">Manage diagnostic tests, pricing, and turnaround times</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-export-csv" onclick="exportCSV()">Export CSV</button>
+        <button class="btn-print-batch" onclick="printBatch()">Print Batch</button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search test by name or code…"/>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-dropdown" id="btnPriority" onclick="toggleDropdown('ddPriority')">All Priorities <i class="bi bi-chevron-down"></i></button>
+        <div class="dropdown-menu-custom" id="ddPriority">
+          <button class="selected" onclick="selectPriority(this,'All Priorities')">All Priorities</button>
+          <button onclick="selectPriority(this,'STAT')">STAT</button>
+          <button onclick="selectPriority(this,'Urgent')">Urgent</button>
+          <button onclick="selectPriority(this,'Routine')">Routine</button>
+        </div>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-dropdown" id="btnDate" onclick="toggleDropdown('ddDate')">Today <i class="bi bi-chevron-down"></i></button>
+        <div class="dropdown-menu-custom" id="ddDate">
+          <button class="selected" onclick="selectDate(this,'Today')">Today</button>
+          <button onclick="selectDate(this,'This Week')">This Week</button>
+          <button onclick="selectDate(this,'This Month')">This Month</button>
+          <button onclick="selectDate(this,'All Time')">All Time</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th>Req. ID</th>
+            <th>Submitted</th>
+            <th>Patient</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>TAT Left</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0001</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Curitana, Maria Antoinette</div>
+              <div class="patient-sub">PT-20260001</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-stat">STAT</span></td>
+            <td><span class="tat-pending">Pending</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-start" onclick="handleStart(this)">Start</button>
+              <button class="act-view" onclick="handleView(this)">View</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0002</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Yu, Katarina</div>
+              <div class="patient-sub">PT-0000002</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-urgent">Urgent</span></td>
+            <td><span class="tat-processing">Processing</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-complete" onclick="handleComplete(this)">Complete</button>
+              <button class="act-view" onclick="handleView(this)">View</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0003</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Kim, Jennie Rubyjane</div>
+              <div class="patient-sub">PT-0000003</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-routine">Routine</span></td>
+            <td><span class="tat-pending">Pending</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-start" onclick="handleStart(this)">Start</button>
+              <button class="act-view" onclick="handleView(this)">View</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0004</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Hwang, Yeji</div>
+              <div class="patient-sub">PT-0000004</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-stat">STAT</span></td>
+            <td><span class="tat-completed">Completed</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-pdf" onclick="handlePdf(this)">PDF <i class="bi bi-download"></i></button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0005</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Pattrinite, Love</div>
+              <div class="patient-sub">PT-0000005</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-urgent">Urgent</span></td>
+            <td><span class="tat-completed">Completed</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-pdf" onclick="handlePdf(this)">PDF <i class="bi bi-download"></i></button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-row">
+        <span id="pageLabel">Showing 1 of 12 tests</span>
+        <div class="pg-btns">
+          <button class="pg-btn" onclick="changePage(null,-1)"><i class="bi bi-chevron-left" style="font-size:10px;"></i></button>
+          <button class="pg-btn active" onclick="changePage(this)">1</button>
+          <button class="pg-btn" onclick="changePage(this)">2</button>
+          <button class="pg-btn" onclick="changePage(this)">3</button>
+          <button class="pg-btn" onclick="changePage(null,1)"><i class="bi bi-chevron-right" style="font-size:10px;"></i></button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+<div class="modal-overlay" id="notif-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('notif-modal')">✕</button>
+    <h2>🔔 Notifications</h2>
+    <p>You have <strong>3</strong> unread alerts.</p>
+    <ul style="font-size:13.5px;color:var(--text-mid);line-height:2;padding-left:18px">
+      <li>⚠️ 2 STAT requests unacknowledged</li>
+      <li>✅ CBC batch #2041 completed</li>
+      <li>📋 New lab request from Dr. Santos</li>
+    </ul>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('notif-modal')">Dismiss</button>
+      <button class="btn btn-primary" onclick="markAllRead()">Mark all read</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+    <h2>👤 Profile</h2>
+    <p>Update your account details below.</p>
+    <input class="modal-input" type="text" value="Curitana, MC" placeholder="Full Name"/>
+    <input class="modal-input" type="email" value="mc.curitana@cliniq.ph" placeholder="Email"/>
+    <input class="modal-input" type="text" value="Lab Administrator" placeholder="Role"/>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('profile-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('profile-modal');showToast('Profile updated!','success')">Save Changes</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="signout-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signout-modal')">✕</button>
+    <h2>🚪 Sign Out</h2>
+    <p>Are you sure you want to sign out of CLINIQ LabCenter?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('signout-modal')">Cancel</button>
+      <button class="btn btn-danger" onclick="closeModal('signout-modal');showToast('Signed out. Goodbye, MC!','info')">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function showToast(msg, type = 'info') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3100);
+}
+
+function markAllRead() {
+  document.getElementById('notifBadge').style.display = 'none';
+  closeModal('notif-modal');
+  showToast('All notifications cleared.', 'success');
+}
+
+function toggleDropdown(id) {
+  const dd = document.getElementById(id);
+  document.querySelectorAll('.dropdown-menu-custom').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
+  dd.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.dropdown-wrap')) {
+    document.querySelectorAll('.dropdown-menu-custom').forEach(d => d.classList.remove('open'));
+  }
+});
+function selectPriority(btn, val) {
+  document.querySelectorAll('#ddPriority button').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('btnPriority').innerHTML = val + ' <i class="bi bi-chevron-down"></i>';
+  document.getElementById('ddPriority').classList.remove('open');
+  showToast('Priority filter: ' + val, 'info');
+}
+function selectDate(btn, val) {
+  document.querySelectorAll('#ddDate button').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('btnDate').innerHTML = val + ' <i class="bi bi-chevron-down"></i>';
+  document.getElementById('ddDate').classList.remove('open');
+  showToast('Date filter: ' + val, 'info');
+}
+
+function exportCSV() {
+  const rows = document.querySelectorAll('#mainTable tbody tr');
+  let csv = 'Req ID,Submitted,Patient,Chart No,Priority,Status,TAT\n';
+  rows.forEach(row => {
+    const cells = row.cells;
+    const reqId     = cells[0].textContent.trim();
+    const submitted = cells[1].textContent.trim();
+    const patient   = cells[2].querySelector('.patient-main').textContent.trim();
+    const chartNo   = cells[2].querySelector('.patient-sub').textContent.trim();
+    const priority  = cells[3].textContent.trim();
+    const status    = cells[4].textContent.trim();
+    const tat       = cells[5].textContent.trim();
+    csv += `"${reqId}","${submitted}","${patient}","${chartNo}","${priority}","${status}","${tat}"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'test-catalogue.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exported successfully', 'success');
+}
+
+function printBatch() {
+  showToast('Sending to printer…', 'info');
+  setTimeout(() => window.print(), 400);
+}
+
+function getPatient(btn) {
+  return btn.closest('tr').querySelector('.patient-main').textContent.trim();
+}
+
+function handleStart(btn) {
+  const row = btn.closest('tr');
+  row.cells[5].innerHTML = '<span class="tat-processing">Processing</span>';
+  row.querySelector('.actions-wrap').innerHTML = `
+    <button class="act-complete" onclick="handleComplete(this)">Complete</button>
+    <button class="act-view" onclick="handleView(this)">View</button>
+  `;
+  showToast('Started: ' + getPatient(btn), 'success');
+}
+
+function handleComplete(btn) {
+  const row = btn.closest('tr');
+  row.cells[5].innerHTML = '<span class="tat-completed">Completed</span>';
+  row.querySelector('.actions-wrap').innerHTML = `
+    <button class="act-pdf" onclick="handlePdf(this)">PDF <i class="bi bi-download"></i></button>
+  `;
+  showToast('Completed: ' + getPatient(btn), 'success');
+}
+
+function handleView(btn) {
+  showToast('Viewing record: ' + getPatient(btn), 'info');
+}
+
+function handlePdf(btn) {
+  showToast('Downloading PDF for: ' + getPatient(btn), 'info');
+}
+
+const numPages = 3;
+let currentPage = 1;
+function changePage(btn, direction) {
+  const pgBtns = document.querySelectorAll('.pg-btn');
+  const numbered = Array.from(pgBtns).filter(b => !isNaN(parseInt(b.textContent)));
+  if (direction !== undefined) {
+    const next = currentPage + direction;
+    if (next < 1 || next > numPages) return;
+    currentPage = next;
+  } else {
+    currentPage = parseInt(btn.textContent);
+  }
+  numbered.forEach(b => b.classList.toggle('active', parseInt(b.textContent) === currentPage));
+  document.getElementById('pageLabel').textContent = 'Showing ' + currentPage + ' of 12 tests';
+  showToast('Page ' + currentPage, 'info');
+}
+</script>
+</body>
+</html>

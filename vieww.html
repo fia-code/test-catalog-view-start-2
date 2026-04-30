@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLINIQ – Request Detail</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<style>
+:root {
+  --navy:        #5d77a6;
+  --navy-dark:   #4a6390;
+  --navy-light:  #7a94bb;
+  --sidebar-bg:  #5d77a6;
+  --header-bg:   #6a84b3;
+  --accent:      #8aadd4;
+  --accent2:     #a8c2e0;
+  --white:       #ffffff;
+  --off-white:   #f4f6fa;
+  --card-bg:     #ffffff;
+  --text-dark:   #2c3e58;
+  --text-mid:    #5d77a6;
+  --text-light:  #96aac6;
+  --green:       #4caf86;
+  --red:         #e05c5c;
+  --orange:      #e8a04a;
+  --sidebar-w:   210px;
+  --border:      #d8e2f0;
+  --shadow:      0 2px 12px rgba(93,119,166,0.10);
+  --radius:      12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  background: var(--navy);
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: var(--sidebar-w); }
+.brand-name { color: var(--white); font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+.header-search {
+  flex: 1;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px; padding: 7px 14px;
+  color: var(--white); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; outline: none; transition: background 0.2s;
+  max-width: 420px;
+}
+.header-search::placeholder { color: rgba(255,255,255,0.5); }
+.header-search:focus { background: rgba(255,255,255,0.2); }
+.header-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.header-btn {
+  background: rgba(255,255,255,0.13); border: none; border-radius: 8px;
+  color: var(--white); font-size: 18px; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.18s; position: relative;
+}
+.header-btn:hover { background: rgba(255,255,255,0.25); }
+.notif-badge {
+  position: absolute; top: 4px; right: 4px;
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700;
+  border-radius: 50%; width: 15px; height: 15px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+
+.layout { display: flex; flex: 1; }
+
+.sidebar {
+  width: var(--sidebar-w); background: var(--sidebar-bg);
+  display: flex; flex-direction: column;
+  padding: 18px 0 16px;
+  position: sticky; top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto; flex-shrink: 0;
+}
+.user-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 12px;
+}
+.user-avatar {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: var(--accent2);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px; color: var(--white);
+  flex-shrink: 0;
+}
+.user-info .name { color: var(--white); font-size: 13px; font-weight: 600; }
+.user-info .role { color: rgba(255,255,255,0.55); font-size: 11px; }
+.nav-section-label {
+  color: rgba(255,255,255,0.4);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 6px 18px 4px; margin-top: 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 18px;
+  color: rgba(255,255,255,0.75);
+  font-size: 13.5px; font-weight: 500;
+  cursor: pointer; transition: background 0.16s, color 0.16s;
+  border: none; background: none; width: 100%; text-align: left; text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.nav-item.active {
+  background: rgba(255,255,255,0.18); color: var(--white);
+  border-left: 3px solid var(--accent2); padding-left: 15px;
+}
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-footer {
+  margin-top: auto; padding: 12px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.signout-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 18px; color: rgba(255,255,255,0.7);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; background: none; border: none; width: 100%;
+  transition: background 0.16s, color 0.16s;
+}
+.signout-btn:hover { background: rgba(255,0,0,0.12); color: #ff7f7f; }
+.brand-bottom {
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px 0 4px; opacity: 0.25; font-size: 48px;
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-bottom-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  opacity: 0.8;
+}
+
+.sidebar-bottom-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.main {
+  flex: 1;
+  padding: 36px 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.request-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 34px 40px 30px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.req-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000000;
+}
+.req-submitted {
+  font-size: 0.72rem;
+  color: #555;
+  margin-top: 3px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.badge-processing {
+  background: #7ed6e8;
+  color: #1800ad;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 16px;
+  border-radius: 20px;
+}
+.btn-x {
+  width: 28px; height: 28px;
+  border: 1.5px solid #545454;
+  border-radius: 50%;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #545454;
+  cursor: pointer;
+}
+.btn-x:hover { background: #f0f0f0; }
+
+.info-grid {
+  background: #7e98c5;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
+  margin: 18px 0;
+}
+.info-field label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #545454;
+  display: block;
+  margin-bottom: 5px;
+}
+.field-value {
+  background: #ffffff;
+  border: 1px solid #dde2ef;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  color: #000000;
+  font-weight: 500;
+  cursor: pointer;
+}
+.field-value:hover { border-color: #5d77a6; }
+.field-edit-input,
+.field-edit-select {
+  background: #ffffff;
+  border: 1px solid #5d77a6;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  color: #000000;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  outline: none;
+}
+
+.section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #545454;
+  margin-bottom: 9px;
+}
+
+.test-badge {
+  display: inline-block;
+  padding: 5px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 6px;
+  background: #6082b6;
+  color: #ffffff;
+}
+
+.notes-box {
+  background: #ffde59;
+  border: 1px solid #ffde59;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: #000000;
+  margin: 12px 0 18px;
+  cursor: pointer;
+}
+.notes-box:hover { border-color: #e6c800; }
+.notes-edit-textarea {
+  background: #ffde59;
+  border: 1px solid #5d77a6;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: #000000;
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  min-height: 58px;
+  resize: vertical;
+  outline: none;
+  margin: 12px 0 6px;
+  display: block;
+}
+.notes-action-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.btn-notes-cancel {
+  background: #d3d3d3;
+  color: #545454;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-notes-save {
+  background: #5d77a6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.processing-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 26px;
+}
+.processing-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.step-dot {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.dot-done    { background: #6cc22c; }
+.dot-active  { background: #4a7ff7; }
+.dot-pending { background: #a6a6a6; }
+.step-title { font-weight: 600; font-size: 0.8rem; color: #000000; }
+.step-title.muted { color: #545454; }
+.step-sub { font-size: 0.7rem; color: #545454; margin-top: 1px; }
+
+.card-footer-btns { display: flex; gap: 14px; }
+.btn-close-gray {
+  flex: 1;
+  background: #d3d3d3;
+  color: #545454;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-close-gray:hover { background: #c5c5c5; }
+.btn-complete {
+  flex: 1.5;
+  background: #36c637;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.btn-complete:hover { background: #2db52e; }
+
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,35,65,0.45); z-index: 200;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--white); border-radius: 14px; padding: 28px 30px;
+  min-width: 300px; max-width: 380px; width: 100%;
+  box-shadow: 0 12px 40px rgba(20,35,65,0.22);
+  position: relative; animation: modalIn 0.2s ease;
+  font-family: 'DM Sans', sans-serif; text-align: center;
+}
+@keyframes modalIn { from { transform: scale(0.93) translateY(12px); opacity: 0; } }
+.modal h2 { font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+.modal p  { font-size: 0.78rem; color: #666; margin-bottom: 22px; line-height: 1.5; }
+.modal-actions { display: flex; gap: 10px; justify-content: center; }
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem; font-weight: 600;
+  border: none; border-radius: 8px;
+  padding: 8px 24px; cursor: pointer;
+  transition: opacity 0.15s, transform 0.12s;
+}
+.btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-secondary { background: #eee; color: #555; }
+.btn-primary   { background: var(--navy); color: #fff; }
+.btn-success   { background: #36c637; color: #fff; }
+
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+  background: var(--navy-dark); color: #fff;
+  padding: 12px 18px; border-radius: 10px;
+  font-size: 13.5px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: toastIn 0.25s ease, toastOut 0.3s ease 2.7s forwards;
+  max-width: 300px; font-family: 'DM Sans', sans-serif;
+}
+.toast.success { border-left: 4px solid var(--green); }
+.toast.error   { border-left: 4px solid var(--red); }
+.toast.info    { border-left: 4px solid var(--accent); }
+@keyframes toastIn  { from { transform: translateX(60px); opacity: 0; } }
+@keyframes toastOut { to   { transform: translateX(60px); opacity: 0; } }
+
+
+.nav-icon-img {
+  width: 18px; height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+.nav-item:hover .nav-icon-img,
+.nav-item.active .nav-icon-img { opacity: 1; }
+.signout-btn .nav-icon-img { opacity: 0.7; }
+.signout-btn:hover .nav-icon-img { filter: brightness(0) saturate(100%) invert(60%) sepia(80%) saturate(400%) hue-rotate(300deg); opacity: 1; }
+
+@media(max-width:900px){
+  .sidebar { width: 54px; }
+  .nav-item span:last-child, .nav-section-label, .user-info, .signout-btn span:last-child { display: none; }
+  .user-card { justify-content: center; padding: 10px; }
+  .brand { min-width: 54px; }
+  .brand-name { display: none; }
+  .main { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="brand">
+    <img src="cliniq_logo.png" alt="CLINIQ" width="28" height="28"/>
+    <span class="brand-name">CLINIQ</span>
+  </div>
+  <input class="header-search" type="search" placeholder="Search tests, patients, requests…"/>
+  <div class="header-actions">
+    <button class="header-btn" onclick="showToast('No new messages.','info')" title="Messages">✉️</button>
+    <button class="header-btn" onclick="openModal('notif-modal')" title="Notifications">
+      🔔<span class="notif-badge" id="notifBadge">3</span>
+    </button>
+    <button class="header-btn" onclick="openModal('profile-modal')" title="Profile">👤</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">MC</div>
+      <div class="user-info">
+        <div class="name">Curitana, MC</div>
+        <div class="role">Lab Administrator</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">OVERVIEW</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="dashboard_icon.png" alt="Dashboard" width="28" height="28"/>
+      <span class="nav-label">Dashboard</span>
+    </button>
+
+    <div class="nav-section-label">MANAGEMENT</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="search.png" alt="Search" width="28" height="28"/>
+      <span class="nav-label">Search</span>
+    </button>
+    <button class="nav-item active" onclick="setActive(this)">
+      <img src="lab_request_icon.png" alt="Lab Requests" width="28" height="28"/>
+      <span class="nav-label">Lab Requests</span>
+    </button>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="billing_icon.png" alt="Billing" width="28" height="28"/>
+      <span class="nav-label">Billing</span>
+    </button>
+
+    <div class="nav-section-label">REPORTS</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="analytics_icon.png" alt="Analytics" width="28" height="28"/>
+      <span class="nav-label">Analytics</span>
+    </button>
+
+    <div class="sidebar-footer">
+  <button class="signout-btn" onclick="openModal('signout-modal')">
+    <img src="signout_btn.png" alt="Sign Out" width="28" height="28"/>
+    <span class="nav-label">Sign Out</span>
+  </button>
+  
+
+  <div class="sidebar-bottom-image">
+    <img src="cliniq_logo.png" alt="CLINIQ Building" width="80" height="80"/>
+  </div>
+</div>
+  </aside>
+
+  <main class="main">
+    <div class="request-card" id="requestCard">
+
+      <div class="card-top">
+        <div>
+          <div class="req-title">Request detail – #REQ-2410</div>
+          <div class="req-submitted">Submitted: Apr 9, 2026 · 8:02 AM</div>
+        </div>
+        <div class="header-right">
+          <span class="badge-processing" id="statusBadge">Processing</span>
+          <button class="btn-x" id="btnX"><i class="bi bi-x"></i></button>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-field">
+          <label>Patient</label>
+          <div class="field-value" id="fv-patient" onclick="startEdit('patient','text')">Curitana, Maria Antoinette C.</div>
+        </div>
+        <div class="info-field">
+          <label>Priority</label>
+          <div class="field-value" id="fv-priority" onclick="startEdit('priority','select')">STAT</div>
+        </div>
+        <div class="info-field">
+          <label>Physician</label>
+          <div class="field-value" id="fv-physician" onclick="startEdit('physician','text')">Dr. Katarina Yu, MD</div>
+        </div>
+        <div class="info-field">
+          <label>Chart No.</label>
+          <div class="field-value" id="fv-chart" onclick="startEdit('chart','text')">PT-19920714-055</div>
+        </div>
+      </div>
+
+      <div class="section-label">Tests Ordered</div>
+      <div class="mb-3" style="margin-bottom:16px;">
+        <span class="test-badge">CBC</span>
+        <span class="test-badge">Urinalysis</span>
+        <span class="test-badge">Lipid Panel</span>
+      </div>
+
+      <div class="section-label">Priority &amp; Notes</div>
+      <div class="notes-box" id="notesDisplay" onclick="editNotes()">
+        *Chest pain workup. Stat labs requested by ER. Obtain results ASAP.
+      </div>
+      <textarea class="notes-edit-textarea" id="notesEditor" style="display:none;"></textarea>
+      <div class="notes-action-row" id="notesActions" style="display:none;">
+        <button class="btn-notes-cancel" onclick="cancelNotes()">Cancel</button>
+        <button class="btn-notes-save" onclick="saveNotes()">Save</button>
+      </div>
+
+      <div class="section-label">Processing Time</div>
+      <ul class="processing-list">
+        <li>
+          <div class="step-dot dot-done"></div>
+          <div>
+            <div class="step-title">Request received</div>
+            <div class="step-sub">Apr 9, 2026, 8:02 AM</div>
+          </div>
+        </li>
+        <li>
+          <div class="step-dot dot-active" id="dot1"></div>
+          <div>
+            <div class="step-title" id="step1title">Processing in progress</div>
+            <div class="step-sub" id="step1sub">Assigned to Jose Rizal, RMT · EST. TAT: 4h</div>
+          </div>
+        </li>
+        <li>
+          <div class="step-dot dot-pending" id="dot2"></div>
+          <div>
+            <div class="step-title muted" id="step2title">Results ready – pending</div>
+            <div class="step-sub" id="step2sub"></div>
+          </div>
+        </li>
+      </ul>
+
+      <div class="card-footer-btns">
+        <button class="btn-close-gray" id="btnClose">Close</button>
+        <button class="btn-complete" id="btnComplete" onclick="markComplete()">
+          <i class="bi bi-check-lg"></i> Mark as Completed
+        </button>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- MODALS -->
+
+<!-- Notifications -->
+<div class="modal-overlay" id="notif-modal">
+  <div class="modal">
+    <h2>🔔 Notifications</h2>
+    <p>You have <strong>3</strong> unread alerts.</p>
+    <ul style="font-size:13px;color:#555;line-height:2;padding-left:18px;text-align:left;margin-bottom:16px;">
+      <li>⚠️ 2 STAT requests unacknowledged</li>
+      <li>✅ CBC batch #2041 completed</li>
+      <li>📋 New lab request from Dr. Santos</li>
+    </ul>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('notif-modal')">Dismiss</button>
+      <button class="btn btn-primary" onclick="markAllRead()">Mark all read</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile -->
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal" style="text-align:left;">
+    <h2 style="text-align:center;">👤 Profile</h2>
+    <p style="text-align:center;">Update your account details below.</p>
+    <input style="width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:10px;outline:none;color:var(--text-dark);" type="text" value="Curitana, MC" placeholder="Full Name"/>
+    <input style="width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:10px;outline:none;color:var(--text-dark);" type="email" value="mc.curitana@cliniq.ph" placeholder="Email"/>
+    <input style="width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:16px;outline:none;color:var(--text-dark);" type="text" value="Lab Administrator" placeholder="Role"/>
+    <div class="modal-actions" style="justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeModal('profile-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('profile-modal');showToast('Profile updated!','success')">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sign Out -->
+<div class="modal-overlay" id="signout-modal">
+  <div class="modal">
+    <h2>🚪 Sign Out</h2>
+    <p>Are you sure you want to sign out of CLINIQ LabCenter?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('signout-modal')">Cancel</button>
+      <button class="btn btn-primary" style="background:var(--red);" onclick="closeModal('signout-modal');showToast('Signed out. Goodbye, MC!','info')">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Close Request Modal -->
+<div class="modal-overlay" id="close-modal">
+  <div class="modal">
+    <h2>Close this request?</h2>
+    <p>Any unsaved changes will be lost.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('close-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="doClose()">Close Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mark Complete Modal -->
+<div class="modal-overlay" id="complete-modal">
+  <div class="modal">
+    <h2>Mark as Completed?</h2>
+    <p>This will finalize #REQ-2410 and make results available for download.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('complete-modal')">Cancel</button>
+      <button class="btn btn-success" onclick="closeModal('complete-modal');doMarkComplete()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Modal helpers ── */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+/* ── Nav active state ── */
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ── Toast ── */
+function showToast(msg, type = 'info') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3100);
+}
+
+/* ── Mark all notifications read ── */
+function markAllRead() {
+  document.getElementById('notifBadge').style.display = 'none';
+  closeModal('notif-modal');
+  showToast('All notifications cleared.', 'success');
+}
+
+/* ── Field inline editing ── */
+function startEdit(field, type) {
+  const fv = document.getElementById('fv-' + field);
+  const current = fv.textContent.trim();
+  fv.onclick = null;
+  if (type === 'select') {
+    const sel = document.createElement('select');
+    sel.className = 'field-edit-select';
+    ['STAT', 'Routine', 'Urgent'].forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt;
+      if (opt === current) o.selected = true;
+      sel.appendChild(o);
+    });
+    fv.textContent = '';
+    fv.appendChild(sel);
+    sel.focus();
+    sel.onblur = () => commitField(fv, sel.value, field, type);
+  } else {
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'field-edit-input';
+    inp.value = current;
+    fv.textContent = '';
+    fv.appendChild(inp);
+    inp.focus(); inp.select();
+    inp.onblur    = () => commitField(fv, inp.value.trim() || current, field, type);
+    inp.onkeydown = e => {
+      if (e.key === 'Enter')  inp.blur();
+      if (e.key === 'Escape') commitField(fv, current, field, type);
+    };
+  }
+}
+
+function commitField(fv, value, field, type) {
+  fv.textContent = value;
+  fv.onclick = () => startEdit(field, type);
+}
+
+/* ── Notes editing ── */
+function editNotes() {
+  const display = document.getElementById('notesDisplay');
+  const editor  = document.getElementById('notesEditor');
+  const actions = document.getElementById('notesActions');
+  editor.value          = display.textContent.trim();
+  display.style.display = 'none';
+  editor.style.display  = 'block';
+  actions.style.display = 'flex';
+  editor.focus();
+}
+function saveNotes() {
+  const display = document.getElementById('notesDisplay');
+  const editor  = document.getElementById('notesEditor');
+  const actions = document.getElementById('notesActions');
+  display.textContent   = editor.value.trim() || display.textContent.trim();
+  display.style.display = 'block';
+  editor.style.display  = 'none';
+  actions.style.display = 'none';
+}
+function cancelNotes() {
+  document.getElementById('notesDisplay').style.display = 'block';
+  document.getElementById('notesEditor').style.display  = 'none';
+  document.getElementById('notesActions').style.display = 'none';
+}
+
+/* ── Mark Complete ── */
+function markComplete() { openModal('complete-modal'); }
+function doMarkComplete() {
+  const badge = document.getElementById('statusBadge');
+  badge.textContent      = 'Completed';
+  badge.style.background = '#d4f5d4';
+  badge.style.color      = '#1a7a1a';
+  document.getElementById('dot1').classList.replace('dot-active', 'dot-done');
+  document.getElementById('dot2').classList.replace('dot-pending', 'dot-active');
+  document.getElementById('step1title').textContent = 'Processing complete';
+  const s2t = document.getElementById('step2title');
+  s2t.textContent = 'Results ready';
+  s2t.classList.remove('muted');
+  const now = new Date();
+  document.getElementById('step2sub').textContent =
+    now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) +
+    ', ' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+  const btn = document.getElementById('btnComplete');
+  btn.disabled      = true;
+  btn.style.opacity = '0.6';
+  btn.style.cursor  = 'not-allowed';
+  showToast('Request #REQ-2410 marked as completed!', 'success');
+}
+
+/* ── Close / X ── */
+document.getElementById('btnX').addEventListener('click', () => openModal('close-modal'));
+document.getElementById('btnClose').addEventListener('click', () => openModal('close-modal'));
+function doClose() {
+  document.getElementById('requestCard').style.display = 'none';
+  closeModal('close-modal');
+  showToast('Request closed.', 'info');
+}
+</script>
+</body>
+</html>
