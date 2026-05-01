@@ -157,7 +157,11 @@
       border-left: 3px solid #a8c2e0;
       padding-left: 15px;
     }
-    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; 
+    }
+    .nav-item img {
+       filter: brightness(0) invert(1);
+     }
 
     .sidebar-footer {
       margin-top: auto;
@@ -196,7 +200,6 @@
       object-fit: contain;
     }
 
-    /* ── MAIN CONTENT ── */
     .main-wrapper {
       margin-left: 210px;
       margin-top: 56px;
@@ -207,7 +210,6 @@
       justify-content: center;
     }
 
-    /* ── SUCCESS CARD ── */
     .success-card {
       background: #bde8d3;
       border: 2px solid #6cc22c;
@@ -254,7 +256,6 @@
     .btn-done:active { transform: scale(0.97); }
     .btn-done:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* ── LAB REQUESTS PLACEHOLDER ── */
     .lab-requests-view {
       display: none;
       width: 100%;
