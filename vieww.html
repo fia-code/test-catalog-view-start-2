@@ -623,12 +623,8 @@ body {
   </main>
 </div>
 
-<!-- TOAST CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- MODALS -->
-
-<!-- Notifications -->
 <div class="modal-overlay" id="notif-modal">
   <div class="modal">
     <h2>🔔 Notifications</h2>
@@ -645,7 +641,6 @@ body {
   </div>
 </div>
 
-<!-- Profile -->
 <div class="modal-overlay" id="profile-modal">
   <div class="modal" style="text-align:left;">
     <h2 style="text-align:center;">👤 Profile</h2>
@@ -660,7 +655,6 @@ body {
   </div>
 </div>
 
-<!-- Sign Out -->
 <div class="modal-overlay" id="signout-modal">
   <div class="modal">
     <h2>🚪 Sign Out</h2>
@@ -671,8 +665,7 @@ body {
     </div>
   </div>
 </div>
-
-<!-- Close Request Modal -->
+  
 <div class="modal-overlay" id="close-modal">
   <div class="modal">
     <h2>Close this request?</h2>
@@ -684,7 +677,6 @@ body {
   </div>
 </div>
 
-<!-- Mark Complete Modal -->
 <div class="modal-overlay" id="complete-modal">
   <div class="modal">
     <h2>Mark as Completed?</h2>
@@ -697,20 +689,18 @@ body {
 </div>
 
 <script>
-/* ── Modal helpers ── */
+
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
 });
 
-/* ── Nav active state ── */
 function setActive(el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
 }
 
-/* ── Toast ── */
 function showToast(msg, type = 'info') {
   const c = document.getElementById('toastContainer');
   const t = document.createElement('div');
@@ -720,14 +710,12 @@ function showToast(msg, type = 'info') {
   setTimeout(() => t.remove(), 3100);
 }
 
-/* ── Mark all notifications read ── */
 function markAllRead() {
   document.getElementById('notifBadge').style.display = 'none';
   closeModal('notif-modal');
   showToast('All notifications cleared.', 'success');
 }
 
-/* ── Field inline editing ── */
 function startEdit(field, type) {
   const fv = document.getElementById('fv-' + field);
   const current = fv.textContent.trim();
@@ -766,7 +754,6 @@ function commitField(fv, value, field, type) {
   fv.onclick = () => startEdit(field, type);
 }
 
-/* ── Notes editing ── */
 function editNotes() {
   const display = document.getElementById('notesDisplay');
   const editor  = document.getElementById('notesEditor');
@@ -792,7 +779,6 @@ function cancelNotes() {
   document.getElementById('notesActions').style.display = 'none';
 }
 
-/* ── Mark Complete ── */
 function markComplete() { openModal('complete-modal'); }
 function doMarkComplete() {
   const badge = document.getElementById('statusBadge');
@@ -816,7 +802,6 @@ function doMarkComplete() {
   showToast('Request #REQ-2410 marked as completed!', 'success');
 }
 
-/* ── Close / X ── */
 document.getElementById('btnX').addEventListener('click', () => openModal('close-modal'));
 document.getElementById('btnClose').addEventListener('click', () => openModal('close-modal'));
 function doClose() {
