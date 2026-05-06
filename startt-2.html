@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CLINIQ - Request Completed</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="brand">
+    <img src="cliniq_logo.png" alt="CLINIQ" width="28" height="28"/>
+    <span class="brand-name">CLINIQ</span>
+  </div>
+  <input class="header-search" id="headerSearch" type="search" placeholder="Search tests, patients, requests…"/>
+  <div class="header-actions">
+    <button class="header-btn" onclick="showToast('No new messages.','info')" title="Messages">✉️</button>
+    <button class="header-btn" onclick="openModal('notif-modal')" title="Notifications">
+      🔔<span class="notif-badge" id="notifBadge">3</span>
+    </button>
+    <button class="header-btn" onclick="openModal('profile-modal')" title="Profile">👤</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">MC</div>
+      <div class="user-info">
+        <div class="name">Curitana, MC</div>
+        <div class="role">Lab Administrator</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">OVERVIEW</div>
+    <button class="nav-item" data-page="Dashboard" onclick="setActive(this)">
+      <img src="dashboard_icon.png" alt="Dashboard" width="28" height="28"/>
+      <span class="nav-label">Dashboard</span>
+    </button>
+
+    <div class="nav-section-label">MANAGEMENT</div>
+    <button class="nav-item" data-page="Search" onclick="setActive(this)">
+      <img src="search.png" alt="Search" width="28" height="28"/>
+      <span class="nav-label">Search</span>
+    </button>
+    <button class="nav-item active" id="navLabRequests" data-page="Lab Requests" onclick="setActive(this)">
+      <img src="lab_request_icon.png" alt="Lab Requests" width="28" height="28"/>
+      <span class="nav-label">Lab Requests</span>
+    </button>
+    <button class="nav-item" data-page="Billing" onclick="setActive(this)">
+      <img src="billing_icon.png" alt="Billing" width="28" height="28"/>
+      <span class="nav-label">Billing</span>
+    </button>
+
+    <div class="nav-section-label">REPORTS</div>
+    <button class="nav-item" data-page="Analytics" onclick="setActive(this)">
+      <img src="analytics_icon.png" alt="Analytics" width="28" height="28"/>
+      <span class="nav-label">Analytics</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <button class="signout-btn" onclick="openModal('signout-modal')">
+        <img src="signout_btn.png" alt="Sign Out" width="28" height="28"/>
+        <span class="nav-label">Sign Out</span>
+      </button>
+      <div class="sidebar-bottom-image">
+        <img src="cliniq_logo.png" alt="CLINIQ Logo" width="80" height="80"/>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+
+    <!-- SUCCESS CARD -->
+    <div class="success-card" id="successCard">
+      <img src="check-removebg-preview.png" alt="check" style="width:80px; height:80px; margin-bottom:24px;"/>
+      <div class="success-title">Request Completed!</div>
+      <div class="success-subtitle">
+        #REQ-2026-001 has been marked as <strong>Completed</strong>. Results are now available for download.
+      </div>
+      <button class="btn-done" id="doneBtn">Done</button>
+    </div>
+
+    <div class="lab-requests-view" id="labRequestsView">
+      <div class="lrv-header">
+        <h2>🧪 Lab Requests</h2>
+        <div class="lrv-header-actions">
+          <button class="lrv-btn">+ New Request</button>
+          <button class="lrv-btn">⬇ Export</button>
+        </div>
+      </div>
+      <div class="lrv-toolbar">
+        <input class="lrv-search" type="search" placeholder="Search by patient, test, or request ID…"/>
+        <select class="lrv-filter">
+          <option>All Status</option>
+          <option>Completed</option>
+          <option>Pending</option>
+          <option>Processing</option>
+          <option>STAT</option>
+        </select>
+        <select class="lrv-filter">
+          <option>All Tests</option>
+          <option>CBC</option>
+          <option>Urinalysis</option>
+          <option>Lipid Panel</option>
+          <option>Blood Glucose</option>
+        </select>
+      </div>
+      <table class="lrv-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Patient</th>
+            <th>Test</th>
+            <th>Requested By</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>#REQ-2026-001</strong></td>
+            <td>Dela Cruz, Juan</td>
+            <td>CBC</td>
+            <td>Dr. Santos</td>
+            <td>May 1, 2026</td>
+            <td><span class="status-badge status-completed">Completed</span></td>
+          </tr>
+          <tr>
+            <td><strong>#REQ-2026-002</strong></td>
+            <td>Reyes, Maria</td>
+            <td>Urinalysis</td>
+            <td>Dr. Lim</td>
+            <td>May 1, 2026</td>
+            <td><span class="status-badge status-pending">Pending</span></td>
+          </tr>
+          <tr>
+            <td><strong>#REQ-2026-003</strong></td>
+            <td>Bautista, Carlos</td>
+            <td>Lipid Panel</td>
+            <td>Dr. Santos</td>
+            <td>Apr 30, 2026</td>
+            <td><span class="status-badge status-processing">Processing</span></td>
+          </tr>
+          <tr>
+            <td><strong>#REQ-2026-004</strong></td>
+            <td>Garcia, Ana</td>
+            <td>Blood Glucose</td>
+            <td>Dr. Reyes</td>
+            <td>Apr 30, 2026</td>
+            <td><span class="status-badge status-stat">STAT</span></td>
+          </tr>
+          <tr>
+            <td><strong>#REQ-2026-005</strong></td>
+            <td>Mendoza, Pedro</td>
+            <td>CBC</td>
+            <td>Dr. Lim</td>
+            <td>Apr 29, 2026</td>
+            <td><span class="status-badge status-completed">Completed</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="lrv-footer">
+        <span>Showing 5 of 24 requests</span>
+        <div class="lrv-pagination">
+          <button class="page-btn active-page">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">›</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="notif-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('notif-modal')">✕</button>
+    <h2>🔔 Notifications</h2>
+    <p>You have <strong>3</strong> unread alerts.</p>
+    <ul class="notif-list">
+      <li>⚠️ 2 STAT requests unacknowledged</li>
+      <li>✅ CBC batch #2041 completed</li>
+      <li>📋 New lab request from Dr. Santos</li>
+    </ul>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('notif-modal')">Dismiss</button>
+      <button class="btn-primary" onclick="markAllRead()">Mark all read</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+    <h2>👤 Profile</h2>
+    <p>Update your account details below.</p>
+    <input class="modal-input" type="text" value="Curitana, MC" placeholder="Full Name"/>
+    <input class="modal-input" type="email" value="mc.curitana@cliniq.ph" placeholder="Email"/>
+    <input class="modal-input" type="text" value="Lab Administrator" placeholder="Role"/>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('profile-modal')">Cancel</button>
+      <button class="btn-primary" onclick="closeModal('profile-modal'); showToast('✓ Profile updated!')">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="signout-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('signout-modal')">✕</button>
+    <h2>🚪 Sign Out</h2>
+    <p>Are you sure you want to sign out of CLINIQ?</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelSignout">Cancel</button>
+      <button class="btn-danger" id="confirmSignout">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
