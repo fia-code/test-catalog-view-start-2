@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLINIQ – Test Catalogue</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="brand">
+    <img src="cliniq_logo.png" alt="CLINIQ" width="28" height="28"/>
+    <span class="brand-name">CLINIQ</span>
+  </div>
+  <input class="header-search" type="search" placeholder="Search tests, patients, requests…"/>
+  <div class="header-actions">
+    <button class="header-btn" onclick="showToast('No new messages.','info')" title="Messages">✉️</button>
+    <button class="header-btn" onclick="openModal('notif-modal')" title="Notifications">
+      🔔<span class="notif-badge" id="notifBadge">3</span>
+    </button>
+    <button class="header-btn" onclick="openModal('profile-modal')" title="Profile">👤</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">MC</div>
+      <div class="user-info">
+        <div class="name">Curitana, MC</div>
+        <div class="role">Lab Administrator</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">OVERVIEW</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="dashboard_icon.png" alt="Dashboard" width="28" height="28"/>
+      <span class="nav-label">Dashboard</span>
+    </button>
+
+    <div class="nav-section-label">MANAGEMENT</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="search.png" alt="Search" width="28" height="28"/>
+      <span class="nav-label">Search</span>
+    </button>
+    <button class="nav-item active" onclick="setActive(this)">
+      <img src="lab_request_icon.png" alt="Lab Requests" width="28" height="28"/>
+      <span class="nav-label">Lab Requests</span>
+    </button>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="billing_icon.png" alt="Billing" width="28" height="28"/>
+      <span class="nav-label">Billing</span>
+    </button>
+
+    <div class="nav-section-label">REPORTS</div>
+    <button class="nav-item" onclick="setActive(this)">
+      <img src="analytics_icon.png" alt="Analytics" width="28" height="28"/>
+      <span class="nav-label">Analytics</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <button class="signout-btn" onclick="openModal('signout-modal')">
+        <img src="signout_btn.png" alt="Sign Out" width="28" height="28"/>
+        <span class="nav-label">Sign Out</span>
+      </button>
+      <div class="sidebar-bottom-image">
+        <img src="cliniq_logo.png" alt="CLINIQ Building" width="80" height="80"/>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Test Catalogue</div>
+        <div class="page-subtitle">Manage diagnostic tests, pricing, and turnaround times</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-export-csv" onclick="exportCSV()">Export CSV</button>
+        <button class="btn-print-batch" onclick="printBatch()">Print Batch</button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search test by name or code…"/>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-dropdown" id="btnPriority" onclick="toggleDropdown('ddPriority')">All Priorities <i class="bi bi-chevron-down"></i></button>
+        <div class="dropdown-menu-custom" id="ddPriority">
+          <button class="selected" onclick="selectPriority(this,'All Priorities')">All Priorities</button>
+          <button onclick="selectPriority(this,'STAT')">STAT</button>
+          <button onclick="selectPriority(this,'Urgent')">Urgent</button>
+          <button onclick="selectPriority(this,'Routine')">Routine</button>
+        </div>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-dropdown" id="btnDate" onclick="toggleDropdown('ddDate')">Today <i class="bi bi-chevron-down"></i></button>
+        <div class="dropdown-menu-custom" id="ddDate">
+          <button class="selected" onclick="selectDate(this,'Today')">Today</button>
+          <button onclick="selectDate(this,'This Week')">This Week</button>
+          <button onclick="selectDate(this,'This Month')">This Month</button>
+          <button onclick="selectDate(this,'All Time')">All Time</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th>Req. ID</th>
+            <th>Submitted</th>
+            <th>Patient</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>TAT Left</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0001</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Curitana, Maria Antoinette</div>
+              <div class="patient-sub">PT-20260001</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-stat">STAT</span></td>
+            <td><span class="tat-pending">Pending</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-start" onclick="handleStart(this)">Start</button>
+              <button class="act-view" onclick="handleView(this)">View</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0002</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Yu, Katarina</div>
+              <div class="patient-sub">PT-0000002</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-urgent">Urgent</span></td>
+            <td><span class="tat-processing">Processing</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-complete" onclick="handleComplete(this)">Complete</button>
+              <button class="act-view" onclick="handleView(this)">View</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0003</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Kim, Jennie Rubyjane</div>
+              <div class="patient-sub">PT-0000003</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-routine">Routine</span></td>
+            <td><span class="tat-pending">Pending</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-start" onclick="handleStart(this)">Start</button>
+              <button class="act-view" onclick="handleView(this)">View</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0004</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Hwang, Yeji</div>
+              <div class="patient-sub">PT-0000004</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-stat">STAT</span></td>
+            <td><span class="tat-completed">Completed</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-pdf" onclick="handlePdf(this)">PDF <i class="bi bi-download"></i></button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><a href="#" class="req-id-link">REQ-26-0005</a></td>
+            <td>Apr 9, 8:02 AM</td>
+            <td class="td-patient">
+              <div class="patient-main">Pattrinite, Love</div>
+              <div class="patient-sub">PT-0000005</div>
+            </td>
+            <td><span class="priority-text">CBC, UA, LIPID</span></td>
+            <td><span class="sts-urgent">Urgent</span></td>
+            <td><span class="tat-completed">Completed</span></td>
+            <td><div class="actions-wrap">
+              <button class="act-pdf" onclick="handlePdf(this)">PDF <i class="bi bi-download"></i></button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-row">
+        <span id="pageLabel">Showing 1 of 12 tests</span>
+        <div class="pg-btns">
+          <button class="pg-btn" onclick="changePage(null,-1)"><i class="bi bi-chevron-left" style="font-size:10px;"></i></button>
+          <button class="pg-btn active" onclick="changePage(this)">1</button>
+          <button class="pg-btn" onclick="changePage(this)">2</button>
+          <button class="pg-btn" onclick="changePage(this)">3</button>
+          <button class="pg-btn" onclick="changePage(null,1)"><i class="bi bi-chevron-right" style="font-size:10px;"></i></button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Notifications Modal -->
+<div class="modal-overlay" id="notif-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('notif-modal')">✕</button>
+    <h2>🔔 Notifications</h2>
+    <p>You have <strong>3</strong> unread alerts.</p>
+    <ul style="font-size:13.5px;color:var(--text-mid);line-height:2;padding-left:18px">
+      <li>⚠️ 2 STAT requests unacknowledged</li>
+      <li>✅ CBC batch #2041 completed</li>
+      <li>📋 New lab request from Dr. Santos</li>
+    </ul>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('notif-modal')">Dismiss</button>
+      <button class="btn btn-primary" onclick="markAllRead()">Mark all read</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+    <h2>👤 Profile</h2>
+    <p>Update your account details below.</p>
+    <input class="modal-input" type="text" value="Curitana, MC" placeholder="Full Name"/>
+    <input class="modal-input" type="email" value="mc.curitana@cliniq.ph" placeholder="Email"/>
+    <input class="modal-input" type="text" value="Lab Administrator" placeholder="Role"/>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('profile-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('profile-modal');showToast('Profile updated!','success')">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sign Out Modal -->
+<div class="modal-overlay" id="signout-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signout-modal')">✕</button>
+    <h2>🚪 Sign Out</h2>
+    <p>Are you sure you want to sign out of CLINIQ LabCenter?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('signout-modal')">Cancel</button>
+      <button class="btn btn-danger" onclick="closeModal('signout-modal');showToast('Signed out. Goodbye, MC!','info')">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
